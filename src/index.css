@@ -49,6 +49,14 @@
 }
 
 @layer components {
+  .loading-container {
+    @apply flex justify-center items-center py-20 w-full;
+  }
+
+
+
+
+
   .pattern {
     @apply bg-hero-pattern w-full h-screen bg-center bg-cover absolute z-0 blur-sm opacity-60;
 
@@ -164,3 +172,4 @@
     display: none;
   }
 }
+
