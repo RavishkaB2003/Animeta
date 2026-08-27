@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import Search from './components/Search'
 import { API_OPTIONS, BASE_URL } from './config/api';
+import Bars from './components/Bars';
+import MovieCard from './components/MovieCard';
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState(''); // Initial search term
+  const [searchTerm, setSearchTerm] = useState('Horimiya'); // Initial search term
   const [errorMessage, setErrorMessage] = useState(''); // State to hold error messages
   const [animeList, setAnimeList] = useState([]); // State to hold the list of anime results
-  const [isloading, setIsLoading] = useState(true); // State to indicate loading state
+  const [isloading, setIsLoading] = useState(false); // State to indicate loading state
 
   
   
@@ -34,6 +36,10 @@ const App = () => {
                     coverImage {
                       large
                     }
+                      averageScore
+                      countryOfOrigin
+                      format
+                      genres
                       startDate {
                         year
                     }
@@ -75,7 +81,7 @@ const App = () => {
       setErrorMessage('Failed to fetch anime. Please try again later.')
     } finally {
       // End loading state
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 
@@ -93,20 +99,23 @@ const App = () => {
       <div className = "wrapper">
         <header>
           <img src = "/hero-img.png" alt = "hero-img" />
-          <h1>  <span className='text-gradient'>Anime</span> At Your Fingertips</h1>
+          <h1>  <span className='text-gradient'>Does</span> The Anime Exist?</h1>
+          <h3 className="text-white font-bold text-center">Search for your favorite anime and find out if it exists!</h3>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header> 
         <section className = "all-movies">
-          <h2>All Movies</h2>
+          <h2 className="mt-10">All Anime</h2>
 
           {isloading ? (
-            <p className="text-white">Loading...</p>
+            <div className="loading-container">
+              <Bars className= " h-10 w-10 text-light-100" bars={4}/>
+            </div>
           ) : errorMessage ? (
-            <p className="text-red-500">{errorMessage}</p>
+            <p className="text-red-500 text-center">{errorMessage}</p>
           ) : (
             <ul>
-              {animeList.map( (anime) => (
-                <p className="text-white">{anime.title.english}</p>
+              {animeList.map((anime) => (
+                <MovieCard key={anime.id} anime={anime} />
               ))}
             </ul>
           )}
