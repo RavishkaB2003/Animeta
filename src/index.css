@@ -133,11 +133,11 @@
 
     /* Line 2: Content Row */
     & .content {
-      @apply mt-2 flex flex-row items-center gap-1.5;
+      @apply mt-2 flex flex-row items-center justify-between gap-1.5 w-full;
     }
 
     & .rating {
-      @apply flex flex-row items-center gap-1;
+      @apply flex flex-row items-center gap-1 shrink-0;
     }
 
     & .rating img {
@@ -148,17 +148,20 @@
       @apply font-bold text-sm text-white;
     }
 
-    /* Dot separator with tight spacing */
-    & .dot {
-      @apply text-[10px] text-gray-100 mx-0.5 select-none leading-none inline-block;
-    }
+    
+
+  
 
     & .content .lang {
-      @apply capitalize text-gray-100 font-medium text-xs;
+      @apply capitalize text-gray-100 font-medium text-xs shrink-0;
+    }
+
+    & .content .startDate {
+      @apply text-gray-100 font-medium text-xs shrink-0;
     }
 
     & .content .format {
-      @apply  capitalize text-white font-medium text-sm ml-25;
+      @apply  capitalize text-white font-medium text-xs ml-auto shrink-0;
     }
   }
 
