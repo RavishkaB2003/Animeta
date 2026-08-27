@@ -113,19 +113,27 @@
     }
   }
 
-  .movie-card {
-    @apply bg-dark-100 p-5 rounded-2xl shadow-inner shadow-light-100/10;
+
+    .movie-card {
+    @apply relative overflow-hidden rounded-2xl cursor-pointer bg-dark-100 shadow-inner shadow-light-100/10;
 
     & img {
-      @apply rounded-lg h-auto w-full;
+      @apply rounded-2xl h-full w-full object-cover;
     }
 
+    /* Hover overlay: hidden with opacity-0 and slides up on hover */
+    & .movie-card-overlay {
+      @apply absolute inset-0 flex flex-col justify-end p-5 bg-linear-to-t from-dark-100 via-dark-100/85 to-transparent opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out;
+    }
+
+    /* Line 1: Anime Title */
     & h3 {
-      @apply text-white font-bold text-base line-clamp-1;
+      @apply text-white font-bold text-base line-clamp-2 leading-tight drop-shadow-md;
     }
 
+    /* Line 2: Content Row */
     & .content {
-      @apply mt-2 flex flex-row items-center flex-wrap gap-2;
+      @apply mt-2 flex flex-row items-center gap-1.5;
     }
 
     & .rating {
@@ -137,24 +145,32 @@
     }
 
     & .rating p {
-      @apply font-bold text-base text-white;
+      @apply font-bold text-sm text-white;
     }
 
-    & .content span {
-      @apply text-sm text-gray-100;
+    /* Dot separator with tight spacing */
+    & .dot {
+      @apply text-[10px] text-gray-100 mx-0.5 select-none leading-none inline-block;
     }
 
-    & .content .lang,
-    & .content .genre,
-    & .content .format,
-    & .content .year {
-      @apply capitalize text-gray-100 font-medium text-base;
+    & .content .lang {
+      @apply capitalize text-gray-100 font-medium text-xs;
+    }
+
+    & .content .format {
+      @apply  capitalize text-white font-medium text-sm ml-25;
     }
   }
+
+  
 }
 
 @utility text-gradient {
   @apply bg-linear-to-r from-[#D6C7FF] to-[#AB8BFF] bg-clip-text text-transparent;
+
+  
+
+  
 }
 
 @utility fancy-text {
