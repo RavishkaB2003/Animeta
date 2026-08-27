@@ -3,22 +3,26 @@ import Search from './components/Search'
 import { API_OPTIONS, BASE_URL } from './config/api';
 import Bars from './components/Bars';
 import MovieCard from './components/MovieCard';
+import useDebounce from './hooks/useDebounce';
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState('Horimiya'); // Initial search term
+  const [searchTerm, setSearchTerm] = useState(''); // Initial search term
   const [errorMessage, setErrorMessage] = useState(''); // State to hold error messages
   const [animeList, setAnimeList] = useState([]); // State to hold the list of anime results
   const [isloading, setIsLoading] = useState(false); // State to indicate loading state
+  const debouncedSearchTerm = useDebounce(searchTerm, 500); // Debounced search term to limit API calls
 
   
   
   // Function to fetch anime data from the API
-  const fetchAnime = async () => {
+  const fetchAnime = async (query = '') => {
     //start loading state
     setIsLoading(true);
     setErrorMessage(''); // Clear any previous error messages
 
     try {
+      //If query is empty do not send a search request to the API
+      const isSearchQuery = Boolean(query && query.trim());
       //GraphQL query to fetch anime data based on the search term
       const response = await fetch (BASE_URL, {
         ...API_OPTIONS,
@@ -46,9 +50,9 @@ const App = () => {
                         }
                       }
                     }`,
-                    variables: {
-                      search: searchTerm
-                    },                
+                    variables: isSearchQuery ? {search: query.trim()} : {},
+                      
+                                   
         }),
       });
 
@@ -87,9 +91,10 @@ const App = () => {
 
 
   useEffect(() => {
-    fetchAnime();
+    
+    fetchAnime(debouncedSearchTerm);
 
-  }, []);
+  }, [debouncedSearchTerm]);
 
 
   return (
@@ -104,7 +109,7 @@ const App = () => {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header> 
         <section className = "all-movies">
-          <h2 className="mt-10">All Anime</h2>
+          <h2 className="mt-10">Popular Anime</h2>
 
           {isloading ? (
             <div className="loading-container">
