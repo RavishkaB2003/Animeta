@@ -104,8 +104,8 @@ const App = () => {
       <div className = "wrapper">
         <header>
           <img src = "/hero-img.png" alt = "hero-img" />
-          <h1>  <span className='text-gradient'>Does</span> The Anime Exist?</h1>
-          <h3 className="text-white font-bold text-center">Search for your favorite anime and find out if it exists!</h3>
+          <h1>  <span className='text-gradient'>Discover</span> Your Next Anime</h1>
+          <h3 className="text-white font-bold text-center">Explore anime, genres, ratings, and everything you need to know</h3>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header> 
         <section className = "all-movies">
