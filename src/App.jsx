@@ -4,6 +4,9 @@ import { API_OPTIONS, BASE_URL } from './config/api';
 import Bars from './components/Bars';
 import MovieCard from './components/MovieCard';
 import useDebounce from './hooks/useDebounce';
+import { updateSearchCount } from './config/appwrite';
+import { getTrendingAnime } from './config/appwrite';
+import TrendingCard from './components/TrendingCard';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState(''); // Initial search term
@@ -11,6 +14,7 @@ const App = () => {
   const [animeList, setAnimeList] = useState([]); // State to hold the list of anime results
   const [isloading, setIsLoading] = useState(false); // State to indicate loading state
   const debouncedSearchTerm = useDebounce(searchTerm, 500); // Debounced search term to limit API calls
+  const [trendingAnime, setTrendingAnime] = useState([]); // State to hold trending anime data
 
   
   
@@ -80,6 +84,11 @@ const App = () => {
       // Update the anime list state with the fetched data
       setAnimeList(data.data.Page.media);
 
+      if (query && animeResults.length > 0) {
+        // Update the search count in Appwrite for the first anime result
+        await updateSearchCount(query, animeResults[0]);
+      }
+
     } catch (error){
       console.error('Error fetching anime:', error)
       setErrorMessage('Failed to fetch anime. Please try again later.')
@@ -89,12 +98,29 @@ const App = () => {
     }
   };
 
+  const loadTrendingAnime = async () => {
+    try {
+
+      const trendingAnime = await getTrendingAnime();
+      setTrendingAnime(trendingAnime || []);
+
+    } catch (error) {
+      console.error('Error fetching trending anime:', error);
+      
+    }
+  }
+
 
   useEffect(() => {
     
     fetchAnime(debouncedSearchTerm);
 
   }, [debouncedSearchTerm]);
+
+
+  useEffect( () => {
+    loadTrendingAnime();
+  }, []);
 
 
   return (
@@ -108,6 +134,19 @@ const App = () => {
           <h3 className="text-white font-bold text-center">Explore anime, genres, ratings, and everything you need to know</h3>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header> 
+        {trendingAnime.length > 0 && (
+          <section className = "trending">
+            <h2>Trending Anime</h2>
+
+            <ul>
+              {trendingAnime.map((anime, index) => {
+                return <TrendingCard key={anime.$id} anime={anime} index={index} />;
+              })}
+            </ul>
+          </section>
+        )}
+
+
         <section className = "all-movies">
           <h2 className="mt-10">Popular Anime</h2>
 

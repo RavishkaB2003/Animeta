@@ -70,22 +70,15 @@
   }
 
   .trending {
-    @apply mt-20;
+    @apply mt-10 mb-12;
 
     & ul {
-      @apply flex flex-row overflow-y-auto gap-5 -mt-10 w-full hide-scrollbar;
+      @apply flex flex-row overflow-auto gap-8 pt-4 pb-6 w-full hide-scrollbar;
+
     }
 
     & ul li {
-      @apply min-w-[230px] flex flex-row items-center;
-    }
-
-    & ul li p {
-      @apply fancy-text mt-[22px] text-nowrap;
-    }
-
-    & ul li img {
-      @apply w-[127px] h-[163px] rounded-lg object-cover -ml-3.5;
+      @apply flex flex-row items-center shrink-0 cursor-pointer;
     }
   }
 
@@ -177,9 +170,10 @@
 }
 
 @utility fancy-text {
-  -webkit-text-stroke: 5px rgba(206, 206, 251, 0.5);
-  font-size: 190px;
+  -webkit-text-stroke: 6px rgba(206, 206, 251, 0.5);
+  font-size: 240px;
   font-family: "Bebas Neue", sans-serif;
+  line-height: 1;
 }
 
 @utility hide-scrollbar {
