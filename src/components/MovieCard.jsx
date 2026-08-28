@@ -1,10 +1,11 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 const MovieCard = ({
-  anime: { title, coverImage, averageScore, countryOfOrigin, format, startDate },
+  anime: { id ,title, coverImage, averageScore, countryOfOrigin, format, startDate },
 }) => {
   return (
-    <div className="movie-card group">
+    <Link to = {`/anime/${id}`} className = "movie-card group">
       {/* Poster Image */}
       <img
         src={coverImage?.large || '/No-Poster.png'}
@@ -38,7 +39,7 @@ const MovieCard = ({
           <p className="format">{format ? format.replaceAll('_', ' ') : 'TV'}</p>
         </div>
       </div>
-    </div>
+    </Link>    
   )
 }
 
