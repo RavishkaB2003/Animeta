@@ -10,11 +10,16 @@ import TrendingCard from './components/TrendingCard';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState(''); // Initial search term
+  const debouncedSearchTerm = useDebounce(searchTerm, 500); // Debounced search term to limit API calls
+
+
   const [errorMessage, setErrorMessage] = useState(''); // State to hold error messages
   const [animeList, setAnimeList] = useState([]); // State to hold the list of anime results
   const [isloading, setIsLoading] = useState(false); // State to indicate loading state
-  const debouncedSearchTerm = useDebounce(searchTerm, 500); // Debounced search term to limit API calls
+  
   const [trendingAnime, setTrendingAnime] = useState([]); // State to hold trending anime data
+  const [isTrendingLoading, setIsTrendingLoading] = useState(false); // State to indicate loading state for trending anime
+  const [trendingError, setTrendingError] = useState(''); // State to hold error messages for trending anime
 
   
   
@@ -99,14 +104,19 @@ const App = () => {
   };
 
   const loadTrendingAnime = async () => {
-    try {
 
+    setIsTrendingLoading(true);
+      setTrendingError('');
+    try {
       const trendingAnime = await getTrendingAnime();
       setTrendingAnime(trendingAnime || []);
 
     } catch (error) {
       console.error('Error fetching trending anime:', error);
+      setTrendingError('Failed to fetch trending anime. Please try again later.');
       
+    } finally {
+      setIsTrendingLoading(false);
     }
   }
 
@@ -120,7 +130,7 @@ const App = () => {
 
   useEffect( () => {
     loadTrendingAnime();
-  }, []);
+    }, []);
 
 
   return (
@@ -134,17 +144,30 @@ const App = () => {
           <h3 className="text-white font-bold text-center">Explore anime, genres, ratings, and everything you need to know</h3>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header> 
-        {trendingAnime.length > 0 && (
+        
           <section className = "trending">
             <h2>Trending Anime</h2>
 
-            <ul>
-              {trendingAnime.map((anime, index) => {
-                return <TrendingCard key={anime.$id} anime={anime} index={index} />;
-              })}
-            </ul>
+            {isTrendingLoading ? (
+              <div className="loading-container">
+                <Bars className= " h-10 w-10 text-light-100" bars={4}/>
+              </div>
+            ) : trendingError ? (
+              <p className="text-red-500 text-center">{trendingError}</p>
+            ) : trendingAnime.length > 0 ? (
+              <ul>
+                {trendingAnime.map((anime, index) => (
+                  <TrendingCard key={anime.$id} anime={anime} index={index} />
+                ))}
+              </ul>
+            ) : (
+              <p className = "text-gray-100 text-sm text-center py-6">
+                No trending anime available at the moment.
+              </p>
+            )
+            }
           </section>
-        )}
+       
 
 
         <section className = "all-movies">
