@@ -19,7 +19,7 @@ export const updateSearchCount = async (searchTerm, movie) => {
         const result = await database.listDocuments(
             VITE_APPWRITE_DATABASE_ID,
             VITE_APPWRITE_TABLE_ID,
-            [Query.equal('searchTerm', searchTerm.toLowerCase().trim())]
+            [Query.equal('movie_id', movie.id)]
         );
 
         if (result.documents.length > 0) {
@@ -31,6 +31,7 @@ export const updateSearchCount = async (searchTerm, movie) => {
                 doc.$id,
                 {
                     count: doc.count + 1,
+                    searchTerm: searchTerm.toLowerCase().trim()
                 }
             );
             console.log(`Updated search count for "${searchTerm}" to ${doc.count + 1}`);

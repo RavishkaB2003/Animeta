@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchAnimeDetails } from '../config/api';
+import { updateSearchCount } from '../config/appwrite';  
 import Bars from '../components/Bars';
 
 const AnimeDetails = () => {
@@ -26,6 +27,15 @@ const AnimeDetails = () => {
         // Call our GraphQL fetcher in api.js passing the integer ID
         const data = await fetchAnimeDetails(id);
         setAnime(data);
+
+        const animeName = data.title?.english || data.title?.romaji || data.title?.userPreferred;
+        if (animeName) {
+          await updateSearchCount(animeName, {
+            id: data.id,
+            coverImage: data.coverImage,
+          });
+        }
+
       } catch (error) {
         console.error('Error loading anime details:', error);
         setErrorMessage('Failed to load anime details.');

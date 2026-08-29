@@ -15,6 +15,9 @@ const Home =  () => {
     //Debounced Search Term
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+    //slow debounce for appwrite udpdate
+    const debouncedAppwriteTerm = useDebounce(searchTerm, 1500);
+
     //State to hold all error messages 
     const [errorMessage, setErrorMessage] = useState('');
     const [trendingError, setTrendingError] = useState('');
@@ -94,11 +97,7 @@ const Home =  () => {
       // Update the anime list state with the fetched data
       setAnimeList(data.data.Page.media);
 
-      if (query && query.trim().length >= 2 && animeResults.length > 0) {
-        // Update the search count in Appwrite for the first anime result
-        await updateSearchCount(query.trim(), animeResults[0]);
-        await loadTrendingAnime();
-      }
+      
 
     } catch (error){
       console.error('Error fetching anime:', error)
@@ -139,6 +138,20 @@ const Home =  () => {
     useEffect( () => {
     loadTrendingAnime();
     }, []);
+
+    useEffect(() => {
+      if(!debouncedAppwriteTerm || debouncedAppwriteTerm().length < 2) return;
+
+      const updateAppwrite = async () => {
+        // Only update if this term still matches what's being searched
+        // (prevents stale updates)
+        if (debouncedAppwriteTerm === debouncedSearchTerm && animeList.length > 0) {
+            await updateSearchCount(debouncedAppwriteTerm.trim(), animeList[0]);
+            await loadTrendingAnime();
+        }
+        };
+        updateAppwrite();
+    },[debouncedAppwriteTerm]);
 
     // Render the Home component
     return (
