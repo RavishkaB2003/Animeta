@@ -13,7 +13,7 @@ const Home =  () => {
     //Initial Search Term
     const [searchTerm, setSearchTerm] = useState('');
     //Debounced Search Term
-    const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
     //State to hold all error messages 
     const [errorMessage, setErrorMessage] = useState('');
@@ -94,9 +94,9 @@ const Home =  () => {
       // Update the anime list state with the fetched data
       setAnimeList(data.data.Page.media);
 
-      if (query && animeResults.length > 0) {
+      if (query && query.trim().length >= 2 && animeResults.length > 0) {
         // Update the search count in Appwrite for the first anime result
-        await updateSearchCount(query, animeResults[0]);
+        await updateSearchCount(query.trim(), animeResults[0]);
       }
 
     } catch (error){

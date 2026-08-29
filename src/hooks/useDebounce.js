@@ -1,8 +1,6 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
-import React from 'react'
-
-const useDebounce = (value, delay = 1000) => {
+const useDebounce = (value, delay = 500) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
 
     useEffect( () => {
