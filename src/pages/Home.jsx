@@ -97,6 +97,7 @@ const Home =  () => {
       if (query && query.trim().length >= 2 && animeResults.length > 0) {
         // Update the search count in Appwrite for the first anime result
         await updateSearchCount(query.trim(), animeResults[0]);
+        await loadTrendingAnime();
       }
 
     } catch (error){
