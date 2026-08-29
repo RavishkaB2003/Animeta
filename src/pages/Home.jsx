@@ -140,7 +140,7 @@ const Home =  () => {
     }, []);
 
     useEffect(() => {
-      if(!debouncedAppwriteTerm || debouncedAppwriteTerm().length < 2) return;
+      if(!debouncedAppwriteTerm || debouncedAppwriteTerm.trim().length < 2) return;
 
       const updateAppwrite = async () => {
         // Only update if this term still matches what's being searched
