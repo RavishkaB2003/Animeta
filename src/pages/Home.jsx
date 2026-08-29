@@ -140,17 +140,16 @@ const Home =  () => {
     }, []);
 
     useEffect(() => {
-      if(!debouncedAppwriteTerm || debouncedAppwriteTerm.trim().length < 2) return;
+    if(!debouncedAppwriteTerm || debouncedAppwriteTerm.trim().length < 2) return;
 
-      const updateAppwrite = async () => {
-        // Only update if this term still matches what's being searched
-        // (prevents stale updates)
-        if (debouncedAppwriteTerm === debouncedSearchTerm && animeList.length > 0) {
+    const updateAppwrite = async () => {
+        // Only update if the terms have settled AND we're not in an error/loading state
+        if (debouncedAppwriteTerm === debouncedSearchTerm && animeList.length > 0 && !errorMessage) {
             await updateSearchCount(debouncedAppwriteTerm.trim(), animeList[0]);
             await loadTrendingAnime();
         }
-        };
-        updateAppwrite();
+    };
+    updateAppwrite();
     },[debouncedAppwriteTerm]);
 
     // Render the Home component
