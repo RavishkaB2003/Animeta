@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-const TrendingCard = ({  index }) => {
+const TrendingCard = ({ anime,  index }) => {
   return (
     <li className="flex flex-row items-center relative group cursor-pointer shrink-0">
       {/* Giant Stylized Rank Number */}
